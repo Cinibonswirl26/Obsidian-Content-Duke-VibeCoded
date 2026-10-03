@@ -512,6 +512,12 @@ function Mat_lookup_tex(LEVEL, name, missing_mats)
     end
   end
 
+  -- games which translate texture names (e.g. Duke Nukem 3D)
+  if not mat and GAME.material_fallback_func then
+    mat = GAME.material_fallback_func(name)
+    GAME.MATERIALS[name] = mat
+  end
+
   if not mat then
     if missing_mats then table.add_unique(missing_mats, name) end
     -- prevent further messages (create a new material)
@@ -536,6 +542,12 @@ function Mat_lookup_flat(LEVEL, name, missing_mats)
   end
 
   local mat = GAME.MATERIALS[name]
+
+  -- games which translate texture names (e.g. Duke Nukem 3D)
+  if not mat and GAME.material_fallback_func then
+    mat = GAME.material_fallback_func(name)
+    GAME.MATERIALS[name] = mat
+  end
 
   if not mat then
     gui.printf("\nLACKING MATERIAL : %s\n\n", name)

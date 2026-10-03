@@ -55,8 +55,11 @@ function Autodetail_get_level_svolume(LEVEL)
 
   LEVEL.total_svolume = total_walkable_area
 
-  if LEVEL.total_svolume > LEVEL_SVOLUME_KICKIN then
-    LEVEL.autodetail_group_walls_factor = (LEVEL.total_svolume / LEVEL_SVOLUME_KICKIN)
+  -- games with low engine limits (e.g. Duke Nukem 3D) can kick in earlier
+  local kickin = PARAM.autodetail_svolume_kickin or LEVEL_SVOLUME_KICKIN
+
+  if LEVEL.total_svolume > kickin then
+    LEVEL.autodetail_group_walls_factor = (LEVEL.total_svolume / kickin)
     ^ GROUPED_WALL_TONE_DOWN_EXP
   end
 end
@@ -81,8 +84,10 @@ function Autodetail_plain_walls(LEVEL)
 
   local tone_down_factor = 0
 
-  if total_perimeter >= LEVEL_PERIMETER_COUNT_KICKIN then
-    tone_down_factor = (1 - (LEVEL_PERIMETER_COUNT_KICKIN / total_perimeter)) * 100
+  local kickin = PARAM.autodetail_perimeter_kickin or LEVEL_PERIMETER_COUNT_KICKIN
+
+  if total_perimeter >= kickin then
+    tone_down_factor = (1 - (kickin / total_perimeter)) * 100
     tone_down_factor = tone_down_factor * UNGROUPED_WALL_TONE_DOWN_EXP
   end
 

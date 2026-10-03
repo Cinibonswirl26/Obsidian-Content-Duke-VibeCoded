@@ -51,6 +51,42 @@ Features of OBSIDIAN include:
 * Super Noah's Ark 3D  
   Basic level of support. 
 
+* Duke Nukem 3D (Build engine)  
+  Basic level of support. Levels are written as Build engine MAP files packed into a GRP file (see [DUKE NUKEM 3D](#duke-nukem-3d) below).
+
+## DUKE NUKEM 3D
+
+Select **Duke Nukem 3D** (or **Duke Nukem 3D (Shareware)**) as the game; the engine is set to **EDuke32 / Build**. The output is a `.grp` file containing one Build engine `.MAP` file per level.
+
+The levels are made by the same layout, room theme and prefab code as the DOOM games: the DOOM textures are translated into Duke tiles, DOOM things into Duke sprites, and the DOOM line/sector specials into Duke mechanics:
+
+* doors become ceiling doors (sector lotag 20), locked doors use `ACCESSSWITCH` panels with the matching key card colour,
+* switches and walk-over triggers become switch walls, `ACTIVATOR` and `TOUCHPLATE` sprites, lifts are player operated elevators,
+* exits are exit switches (wall lotag 65535), secret exits are `NUKEBUTTON`s leading to the secret level, secret areas use sector lotag 32767.
+
+Only tiles from the shareware `DUKE3D.GRP` (v1.3D) are used. The full version adds the Enforcer, Assault Commander, Sentry Drone, Protozoid Slimer, the bosses of episodes 2-4 and the shrinker, freezethrower and devastator; the Shareware choice leaves these out.
+
+**Episodes.** Levels are named like the original ones (`E1L1.MAP` ...) and follow the structure of the original episodes (Atomic Edition):
+
+| Episode | Levels | Boss level | Secret levels |
+|---|---|---|---|
+| E1 L.A. Meltdown | L1-L5 | L5 (Battlelord) | L6 (from L4), L7 (from L5) |
+| E2 Lunar Apocalypse | L1-L9 | L9 (Overlord) | L10 (from L5), L11 (from L8) |
+| E3 Shrapnel City | L1-L9 | L9 (Cycloid Emperor) | L10 (from L5), L11 (from L8) |
+| E4 The Birth | L1-L10 | L10 (Alien Queen) | L11 (from L5) |
+
+With *Game Length* set to *Episode* one complete episode is made (pick it with the **Duke Nukem 3D Episode** module, episode 1 by default), *Full Game* makes all four episodes (only E1L1-E1L6 for the shareware). On a boss level there is no exit: killing the boss ends the episode, like in the original game.
+
+**Playing.** With EDuke32, load the GRP on top of the game data, which replaces the original levels:
+
+```
+eduke32 -grp OBSIDIAN.GRP
+```
+
+A single level can be played with `eduke32 -map E1L1.MAP` after extracting it from the GRP.
+
+Levels which fit the limits of the original game (1024 sectors, 8192 walls, 4096 sprites) are written as version 7 maps, which every Build port can load. Bigger levels are written as version 8 maps, which need EDuke32 or another modern port. Large level sizes are capped for Duke Nukem 3D, and auto detailing kicks in early, to stay within these limits.
+
 ## QUICK START GUIDE (Windows)
 
 First, unpack the zip somewhere .  Make sure it is extracted with folders, and also make sure the OBSIDIAN.EXE file gets extracted too.

@@ -5828,7 +5828,7 @@ end
 OB_THEMES["tech"] =
 {
   label = _("Tech"),
-  game = "doomish",
+  game = { doom1=1, doom2=1, duke3d=1 },
   priority = 50,
   name_class = "TECH",
   mixed_prob = 90,
@@ -5838,7 +5838,7 @@ OB_THEMES["tech"] =
 OB_THEMES["urban"] =
 {
   label = _("Urban"),
-  game = "doom2",
+  game = { doom2=1, duke3d=1 },
   priority = 30,
   name_class = "URBAN",
   mixed_prob = 35,
@@ -5848,7 +5848,7 @@ OB_THEMES["urban"] =
 OB_THEMES["hell"] =
 {
   label = _("Hell"),
-  game = "doomish",
+  game = { doom1=1, doom2=1, duke3d=1 },
   priority = 20,
   name_class = "GOTHIC",
   mixed_prob = 35,

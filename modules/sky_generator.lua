@@ -337,6 +337,8 @@ OB_MODULES["sky_generator"] =
 {
   label = _("Sky Generator"),
 
+  game = "!duke3d",
+
   where = "other",
   priority = 93,
 

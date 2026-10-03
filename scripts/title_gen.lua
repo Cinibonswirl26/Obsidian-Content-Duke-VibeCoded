@@ -2100,6 +2100,9 @@ end
 
 
 function Title_generate()
+  -- games without a title picture (e.g. Duke Nukem 3D)
+  if not PARAM.titlepic_lump then return end
+
   assert(GAME.title)
   assert(GAME.RESOURCES.PALETTES)
   assert(GAME.RESOURCES.PALETTES.normal)

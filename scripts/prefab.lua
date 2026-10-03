@@ -2320,7 +2320,14 @@ function Fab_replacements(LEVEL, fab)
       end
     end
 
-    return THEME.entity_remap_by_id[val] or val
+    val = THEME.entity_remap_by_id[val] or val
+
+    -- games which translate the DOOM things in prefabs (e.g. Duke Nukem 3D)
+    if GAME.thing_remap_func and val then
+      val = GAME.thing_remap_func(val)
+    end
+
+    return val
   end
 
 

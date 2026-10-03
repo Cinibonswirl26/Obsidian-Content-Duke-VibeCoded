@@ -1055,6 +1055,13 @@ function Episode_plan_monsters()
 
       LEV.boss_quotas = { minor=0, nasty=0, tough=0 }
 
+      -- a boss which the game requires on this level (e.g. the episode
+      -- bosses of Duke Nukem 3D)
+      if LEV.forced_boss and GAME.MONSTERS[LEV.forced_boss] then
+        table.insert(LEV.boss_fights, { mon=LEV.forced_boss, count=1, boss_type="tough", forced=true })
+        goto skip
+      end
+
       if LEV.is_procedural_gotcha and PARAM.bool_boss_gen == 1 then
         create_fight(LEV, "tough", 1)
         goto skip

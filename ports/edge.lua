@@ -157,6 +157,8 @@ OB_PORTS["edge"] =
 {
   label = _("EDGE-Classic"),
 
+  game = "!duke3d",
+
   extends = "advanced",
 
   priority = 104,

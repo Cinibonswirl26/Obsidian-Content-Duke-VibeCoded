@@ -342,6 +342,17 @@ function Monster_assign_bosses(LEVEL)
     -- already has one?
     if R.boss_fight then return -1 end
 
+    -- a required boss : use a big room, preferably the exit room
+    if bf.forced then
+      if R.is_start or R.is_hallway then return -1 end
+
+      local score = R.svolume + gui.random()
+
+      if R.is_exit then score = score + 200 end
+
+      return score
+    end
+
     if LEVEL.is_procedural_gotcha and PARAM.bool_boss_gen == 1 then return 1 end
 
     -- require a goal (e.g. a KEY)
@@ -2333,6 +2344,27 @@ gui.debugf("   doing spot : Mon=%s\n", tostring(mon))
 
           spot = grab_monster_spot(mon, R.guard_chunk, reqs)
         end
+      end
+
+      -- a required boss must be placed : try again with a smaller
+      -- size (the game itself decides how big the monster really is)
+      if not spot and bf.forced then
+        local info = GAME.MONSTERS[bf.mon]
+        local old_r, old_h = info.r, info.h
+
+        for _,size in ipairs({ {32,96}, {24,72}, {20,56} }) do
+          info.r = math.min(old_r, size[1])
+          info.h = math.min(old_h, size[2])
+
+          spot = grab_monster_spot(bf.mon, nil, reqs)
+
+          if spot then
+            mon = bf.mon
+            break
+          end
+        end
+
+        info.r, info.h = old_r, old_h
       end
 
       if not spot then

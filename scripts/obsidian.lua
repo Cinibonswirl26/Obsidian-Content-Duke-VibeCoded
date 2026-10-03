@@ -481,7 +481,21 @@ function ob_update_ports()
   end
 
   if need_new then
-    OB_CONFIG.port = "boom"
+    -- prefer BOOM, otherwise pick the visible port with the highest
+    -- priority (e.g. for games which are not DOOM based)
+    local best
+
+    if OB_PORTS["boom"] and ob_match_conf(OB_PORTS["boom"]) then
+      best = "boom"
+    else
+      for name,def in pairs(OB_PORTS) do
+        if ob_match_conf(def) and (not best or (def.priority or 0) > (OB_PORTS[best].priority or 0)) then
+          best = name
+        end
+      end
+    end
+
+    OB_CONFIG.port = best or "boom"
     gui.set_button("port", OB_CONFIG.port)
   end
 end

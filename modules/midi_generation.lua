@@ -26,6 +26,8 @@ OB_MODULES["midi_generation"] =
 
   label = _("MIDI Generation [Unstable]"),
 
+  game = "!duke3d",
+
   where = "experimental",
   priority = 5,
 

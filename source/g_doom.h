@@ -76,6 +76,32 @@ enum subformat_e
 
 extern int sub_format;
 
+// When a capture object is installed, the Add*() functions below do not
+// write any WAD lumps, they pass the map data to the capture object
+// instead.  This is used by games with a non-DOOM output format (like
+// Duke Nukem 3D) which still use the DOOM CSG code to make sectors.
+class map_capture_c
+{
+  public:
+    virtual ~map_capture_c() = default;
+
+    virtual void Vertex(int x, int y) = 0;
+    virtual void Sector(int f_h, const std::string &f_tex, int c_h, const std::string &c_tex, int light, int special,
+                        int tag) = 0;
+    virtual void Sidedef(int sector, const std::string &l_tex, const std::string &m_tex, const std::string &u_tex,
+                         int x_offset, int y_offset) = 0;
+    virtual void Linedef(int vert1, int vert2, int side1, int side2, int type, int flags, int tag) = 0;
+    virtual void Thing(int x, int y, int h, int type, int angle, int options) = 0;
+
+    virtual int NumVertexes() = 0;
+    virtual int NumSectors()  = 0;
+    virtual int NumSidedefs() = 0;
+    virtual int NumLinedefs() = 0;
+    virtual int NumThings()   = 0;
+};
+
+extern map_capture_c *capture;
+
 /***** FUNCTIONS ****************/
 
 bool StartWAD(const std::string &filename);

@@ -906,6 +906,10 @@ bool Build_Cool_Shit()
         {
             game_object = Doom_GameObject();
         }
+        else if (StringCompare(format, "duke3d") == 0)
+        {
+            game_object = Duke_GameObject();
+        }
         else
         {
             FatalError("ERROR: unknown format: '%s'\n", format.c_str());

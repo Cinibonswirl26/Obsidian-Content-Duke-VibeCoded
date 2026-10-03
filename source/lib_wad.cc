@@ -19,6 +19,7 @@
 //
 //------------------------------------------------------------------------
 
+#include <cstring>
 #include "lib_wad.h"
 
 #include <list>
@@ -269,6 +270,13 @@ void WAD_CloseWrite(void)
 
 void WAD_NewLump(std::string_view name)
 {
+    // games which do not output a WAD (e.g. Duke Nukem 3D) simply
+    // discard any lumps which the scripts try to write.
+    if (!wad_W_fp)
+    {
+        return;
+    }
+
     if (name.size() > 8)
     {
         FatalError("WAD_NewLump: name too long: '%s'\n", std::string(name).c_str());
@@ -283,7 +291,7 @@ void WAD_NewLump(std::string_view name)
 
 bool WAD_AppendData(const void *data, int length)
 {
-    if (length == 0)
+    if (length == 0 || !wad_W_fp)
     {
         return true;
     }
@@ -295,6 +303,11 @@ bool WAD_AppendData(const void *data, int length)
 
 void WAD_FinishLump(void)
 {
+    if (!wad_W_fp)
+    {
+        return;
+    }
+
     const int len = ftell(wad_W_fp) - wad_W_lump.pos;
 
     // pad lumps to a multiple of four bytes

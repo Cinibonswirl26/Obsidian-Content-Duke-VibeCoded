@@ -19,6 +19,7 @@
 //
 //------------------------------------------------------------------------
 
+#include <cstring>
 #include "g_doom.h"
 
 #include <locale.h>
@@ -53,6 +54,8 @@ extern int ef_thing_mode;
 static std::string level_name;
 
 int Doom::sub_format;
+
+Doom::map_capture_c *Doom::capture = nullptr;
 
 int dm_offset_map;
 
@@ -418,6 +421,13 @@ static void WriteSections()
 
 void Doom::AddSectionLump(char ch, std::string_view name, qLump_c *lump)
 {
+    if (!sections[0])
+    {
+        // no WAD is being written (e.g. Duke Nukem 3D output)
+        delete lump;
+        return;
+    }
+
     int k;
     switch (ch)
     {
@@ -586,6 +596,11 @@ void Doom::EndLevel(const std::string &level_name)
 
 void Doom::HeaderPrintf(const char *str, ...)
 {
+    if (capture)
+    {
+        return;
+    }
+
     static char message_buf[OBSIDIAN_MSG_BUF_LEN];
 
     va_list args;
@@ -601,6 +616,12 @@ void Doom::HeaderPrintf(const char *str, ...)
 
 void Doom::AddVertex(int x, int y)
 {
+    if (capture)
+    {
+        capture->Vertex(x, y);
+        return;
+    }
+
     if (dm_offset_map)
     {
         x += 32;
@@ -628,6 +649,12 @@ void Doom::AddVertex(int x, int y)
 void Doom::AddSector(int f_h, const std::string &f_tex, int c_h, const std::string &c_tex, int light, int special,
                      int tag)
 {
+    if (capture)
+    {
+        capture->Sector(f_h, f_tex, c_h, c_tex, light, special, tag);
+        return;
+    }
+
     if (!UDMF_mode)
     {
         raw_sector_t sec;
@@ -661,6 +688,12 @@ void Doom::AddSector(int f_h, const std::string &f_tex, int c_h, const std::stri
 void Doom::AddSidedef(int sector, const std::string &l_tex, const std::string &m_tex, const std::string &u_tex,
                       int x_offset, int y_offset)
 {
+    if (capture)
+    {
+        capture->Sidedef(sector, l_tex, m_tex, u_tex, x_offset, y_offset);
+        return;
+    }
+
     if (!UDMF_mode)
     {
         raw_sidedef_t side;
@@ -691,6 +724,12 @@ void Doom::AddSidedef(int sector, const std::string &l_tex, const std::string &m
 
 void Doom::AddLinedef(int vert1, int vert2, int side1, int side2, int type, int flags, int tag, const uint8_t *args)
 {
+    if (capture)
+    {
+        capture->Linedef(vert1, vert2, side1, side2, type, flags, tag);
+        return;
+    }
+
     if (sub_format != SUBFMT_Hexen)
     {
         if (!UDMF_mode)
@@ -893,6 +932,12 @@ void Doom::AddLinedef(int vert1, int vert2, int side1, int side2, int type, int 
 void Doom::AddThing(int x, int y, int h, int type, int angle, int options, int tid, uint8_t special,
                     const uint8_t *args)
 {
+    if (capture)
+    {
+        capture->Thing(x, y, h, type, angle, options);
+        return;
+    }
+
     if (dm_offset_map)
     {
         x += 32;
@@ -1090,6 +1135,11 @@ void Doom::AddThing(int x, int y, int h, int type, int angle, int options, int t
 
 int Doom::NumVertexes()
 {
+    if (capture)
+    {
+        return capture->NumVertexes();
+    }
+
     if (!UDMF_mode)
     {
         return vertex_lump->GetSize() / sizeof(raw_vertex_t);
@@ -1099,6 +1149,11 @@ int Doom::NumVertexes()
 
 int Doom::NumSectors()
 {
+    if (capture)
+    {
+        return capture->NumSectors();
+    }
+
     if (!UDMF_mode)
     {
         return sector_lump->GetSize() / sizeof(raw_sector_t);
@@ -1108,6 +1163,11 @@ int Doom::NumSectors()
 
 int Doom::NumSidedefs()
 {
+    if (capture)
+    {
+        return capture->NumSidedefs();
+    }
+
     if (!UDMF_mode)
     {
         return sidedef_lump->GetSize() / sizeof(raw_sidedef_t);
@@ -1117,6 +1177,11 @@ int Doom::NumSidedefs()
 
 int Doom::NumLinedefs()
 {
+    if (capture)
+    {
+        return capture->NumLinedefs();
+    }
+
     if (!UDMF_mode)
     {
         if (sub_format == SUBFMT_Hexen)
@@ -1131,6 +1196,11 @@ int Doom::NumLinedefs()
 
 int Doom::NumThings()
 {
+    if (capture)
+    {
+        return capture->NumThings();
+    }
+
     if (!UDMF_mode)
     {
         if (sub_format == SUBFMT_Hexen)

@@ -60,6 +60,8 @@ end
 OB_PORTS["zdoom"] =
 {
   label = _("GZDoom"),
+
+  game = "!duke3d",
   priority = 105,
 
   extends = "advanced",

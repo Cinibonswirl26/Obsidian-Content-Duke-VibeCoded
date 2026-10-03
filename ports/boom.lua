@@ -146,6 +146,8 @@ OB_PORTS["boom"] =
 {
   label = _("BOOM Compat"),
 
+  game = "!duke3d",
+
   priority = 103,
 
   tables =
@@ -181,6 +183,8 @@ ADVANCED.PARAMETERS =
 OB_PORTS["advanced"] =
 {
   label = _("Advanced"),
+
+  game = "!duke3d",
   priority = 95,
 
   extends = "boom",
