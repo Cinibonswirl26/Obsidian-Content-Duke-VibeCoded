@@ -19,6 +19,8 @@
 //
 //----------------------------------------------------------------------
 
+#include <cstring>
+
 #ifndef OBSIDIAN_CONSOLE_ONLY
 #include <FL/Fl_Native_File_Chooser.H>
 #include <FL/fl_ask.H>

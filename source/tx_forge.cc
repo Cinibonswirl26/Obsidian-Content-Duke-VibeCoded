@@ -32,6 +32,7 @@
 
 /* Ripped apart to use in OBLIGE by Andrew Apted, October 2008 */
 
+#include <cstring>
 #include "tx_forge.h"
 
 #include "lib_util.h"

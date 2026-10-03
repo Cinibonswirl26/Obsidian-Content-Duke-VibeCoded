@@ -19,6 +19,7 @@
 //
 //----------------------------------------------------------------------
 
+#include <cstring>
 #include "m_lua.h"
 
 #include <algorithm>
@@ -1386,7 +1387,9 @@ int generate_midi_track(lua_State *L)
     if (!steve_output.empty())
         TransferMEMtoWAD((const uint8_t *)steve_output.data(), steve_output.size(), midi_file);
 
+#ifndef OBSIDIAN_CONSOLE_ONLY
     Main::Ticker();
+#endif
 
     return 0;
 }
